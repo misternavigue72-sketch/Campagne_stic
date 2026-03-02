@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KONE NAVIGUE | Candidat Président STIC 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        @property --angle { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+        :root { --deep-blue: #1e293b; --gold: #d4af37; --beige: #f8f8f2; --accent-blue: #36C5F0; }
+        
+        body { margin: 0; background: var(--beige); font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; color: var(--deep-blue); }
+
+        /* Background Fixé avec Blur */
+        .liquid-bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; background: var(--beige); }
+        .blob { position: absolute; width: 50vw; height: 50vw; border-radius: 50%; filter: blur(80px); animation: move 20s infinite alternate ease-in-out; opacity: 0.5; }
+        .blob-1 { background: var(--accent-blue); top: -10%; left: -10%; }
+        .blob-2 { background: var(--gold); bottom: -10%; right: -10%; }
+        @keyframes move { from { transform: translate(0, 0) scale(1); } to { transform: translate(100px, 50px) scale(1.1); } }
+
+        /* Logos Style */
+        .logo-box { background: white; padding: 6px 14px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 10px; pointer-events: auto; }
+        .nav-photo { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--gold); }
+
+        /* Boutons */
+        .btn-glow { all: unset; position: relative; padding: 1rem 2rem; font-family: 'Orbitron'; font-size: 0.75rem; color: white; cursor: pointer; background: var(--deep-blue); border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; z-index: 10; transition: 0.4s; text-align: center; }
+        .btn-glow::before { content: ""; position: absolute; inset: -3px; z-index: -1; background-image: conic-gradient(from var(--angle), transparent 70%, var(--gold), var(--accent-blue)); border-radius: inherit; animation: rotate-glow 2s linear infinite; }
+        @keyframes rotate-glow { from { --angle: 0deg; } to { --angle: 360deg; } }
+
+        /* Roadmap Horizon */
+        .scroll-wrapper { display: flex; gap: 2rem; padding: 2rem 10vw; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+        .scroll-wrapper::-webkit-scrollbar { display: none; }
+        
+        .detail-card { min-width: 320px; height: auto; min-height: 420px; background: white; border-radius: 35px; padding: 2rem; display: flex; flex-direction: column; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .details-content { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.5s ease; font-size: 0.88rem; line-height: 1.6; text-align: justify; }
+        
+        @media (min-width: 1024px) {
+            .detail-card.active { min-width: 550px; background: var(--deep-blue); color: white; }
+            .detail-card.active .details-content { max-height: 1000px; opacity: 1; margin-top: 1.2rem; }
+            .detail-card.active .id-tag { color: rgba(255,255,255,0.1); }
+            .detail-card.active .text-slate-500 { color: #cbd5e1; }
+        }
+
+        @media (max-width: 1023px) {
+            .scroll-wrapper { flex-direction: column; overflow-x: hidden; padding: 1.5rem; }
+            .detail-card { min-width: 100%; height: auto; min-height: 140px; padding: 1.5rem; }
+            .detail-card.active { background: var(--deep-blue); color: white; }
+            .detail-card.active .details-content { max-height: 800px; opacity: 1; margin-top: 1rem; padding-bottom: 1rem; }
+        }
+
+        .citation-box { border-left: 5px solid var(--accent-blue); background: rgba(54, 197, 240, 0.05); padding: 1.5rem; border-radius: 0 20px 20px 0; font-weight: 700; color: var(--deep-blue); font-style: italic; }
+    </style>
+</head>
+<body>
+    <div class="liquid-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <nav id="logos-layer" class="fixed top-6 left-6 right-6 flex justify-between opacity-0 z-[100] pointer-events-none">
+        <div class="logo-box border-r-4 border-blue-500">
+            <span class="font-bold text-slate-800 tracking-tighter uppercase text-xs">Kone Navigue</span>
+            <img src="photo1.jpeg" alt="Navigue" class="nav-photo">
+        </div>
+        <div class="flex gap-2">
+            <div class="logo-box border-l-4 border-blue-500"><img src="logo_inphb.png" alt="INPHB" class="h-6"></div>
+            <div class="logo-box border-l-4 border-blue-500"><img src="logo_esi.png" alt="ESI" class="h-6"></div>
+        </div>
+    </nav>
+
+    <div id="welcome-screen" class="h-screen flex flex-col items-center justify-center text-center p-6 relative z-50">
+        <h2 class="text-3xl font-bold mb-10 uppercase tracking-widest">L'avenir est ici</h2>
+        <button class="btn-glow scale-110" onclick="triggerExplosion()">DÉCOUVRIR LE PROJET 🚀</button>
+    </div>
+
+    <main id="home-page" class="hidden opacity-0 flex-col items-center text-center pt-24 px-6 pb-20">
+        <h1 class="text-6xl md:text-8xl font-black mb-6 uppercase tracking-tighter">Kone Navigue</h1>
+        <div class="relative mb-10">
+            <img src="photo.jpg" class="w-48 h-48 md:w-60 md:h-60 rounded-[50px] shadow-2xl border-4 border-white object-cover">
+            <div class="absolute -bottom-3 -right-3 bg-emerald-500 text-white px-4 py-1.5 rounded-2xl font-bold shadow-lg">STIC 1</div>
+        </div>
+        <p class="text-xl md:text-2xl font-semibold text-slate-600 mb-12 italic">“Ne subissons pas l'avenir, codons-le ensemble”</p>
+        <div class="flex flex-col md:flex-row gap-6">
+            <button class="btn-glow" onclick="navigateTo('about')">MON ENGAGEMENT</button>
+            <button class="btn-glow" onclick="navigateTo('roadmap')">MA ROADMAP</button>
+        </div>
+    </main>
+
+    <section id="about-page" class="hidden opacity-0 flex-col items-center pt-24 px-6 pb-32">
+        <h2 class="text-4xl font-black mb-10 uppercase tracking-widest">Mon Engagement</h2>
+        <div class="max-w-3xl bg-white/60 backdrop-blur-xl p-8 md:p-12 rounded-[45px] border border-white shadow-2xl text-left space-y-6 text-slate-800">
+            <p>Être président de promotion a toujours été une ambition pour moi depuis le début de l'année. Loin du simple fait de vous diriger, vous mes camarades, j'ai envie de nous faire progresser. Nous faire progresser à tous les niveaux possibles, tout en chérissant le désir de faire de nous l'une des meilleures promotions de notre filière.</p>
+            <p>Au fil de mes projets personnels sous Linux, j'ai acquis une certaine autonomie technique et une rigueur que je souhaite aujourd'hui mettre au profit de notre promotion. Pour moi, la présidence n'est pas un titre, mais une fonction de service. Mon objectif est de transformer nos défis académiques en opportunités technologiques, en facilitant l'accès aux ressources et en créant une cohésion basée sur l'entraide.</p>
+            <div class="citation-box">
+                "Je ne vous demande pas de me suivre, je vous propose de construire ensemble un environnement où chaque étudiant de la STIC 1 pourra exceller. Ne subissons pas l'avenir, codons-le ensemble."
+            </div>
+        </div>
+        <button class="mt-10 btn-glow" onclick="navigateTo('home')">← RETOUR</button>
+    </section>
+
+    <section id="roadmap-page" class="hidden opacity-0 flex-col items-center pt-24 px-4 pb-40">
+        <h2 class="text-3xl font-black mb-2 uppercase tracking-widest text-center">ROADMAP TO THE SUCCES</h2>
+        <p class="text-slate-500 mb-10 italic">Cliquez sur un pilier pour découvrir les détails</p>
+        <div class="scroll-wrapper w-full" id="horizontal-scroller"></div>
+        <button class="mt-12 btn-glow" onclick="navigateTo('home')">← MENU PRINCIPAL</button>
+    </section>
+
+    <footer id="main-footer" class="hidden fixed bottom-0 w-full bg-white/30 backdrop-blur-md border-t border-white/50 py-4 px-8 z-[110]">
+        <div class="flex justify-between items-center max-w-6xl mx-auto">
+            <div class="text-[10px] md:text-xs font-bold text-slate-500 uppercase text-left">
+                <p>© 2026 KONE NAVIGUE</p>
+                <p>Candidat à la presidence de la promotion STIC 25 </p>
+            </div>
+            <div class="flex gap-4 text-[10px] font-black uppercase">
+                <a href="https://github.com/misternavigue72-sketch" target="_blank" class="hover:text-blue-500">GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const roadmapData = [
+            { id: "01", title: "THE STIC INDEX", icon: "🚀", details: "Plus qu'un annuaire, c'est notre force de frappe numérique. J'implémenterai une plateforme web interactive regroupant les profils professionnels de chaque membre de la promotion. Nous permettrons aux recruteurs, aux entreprises partenaires et au réseau des Alumni de l'INP-HB de découvrir nos compétences en un clic. Ne soyez plus anonymes, soyez visibles. À l'École 42 ou au MIT, les étudiants sont chassés par les entreprises dès la 1ère année parce que leur travail est public. Avec le STIC Index, je ne vous donne pas juste un site web, je vous donne la même force de frappe qu'un étudiant d'une grande école internationale" },
+            { id: "02", title: "LE GITHUB DE PROMO", icon: "🛡️", details: "Fini l'éparpillement des ressources sur WhatsApp. Le Noyau est notre dépôt centralisé, structuré par matière, pour l'archivage de tous nos codes (C, Python) et ressources techniques. C'est un espace collaboratif où nous mutualisons nos forces : chaque corrigé de TD et chaque script d'automatisation y est versionné. En rejoignant le Noyau, vous n'apprenez pas seulement à coder, vous apprenez à travailler comme les ingénieurs de chez Google ou Microsoft. C'est la mémoire vive de notre promotion.." },
+            { id: "03", title: "LE STIC-OS", icon: "🐧", details: "Pourquoi perdre deux jours à configurer son PC quand on peut le faire en deux minutes ? Le STIC-OS est un script universel (Python) que j'ai conçu pour automatiser l'installation de votre environnement de travail. En une seule commande, installez vos compilateurs (GCC), vos interpréteurs (Python), VS Code avec ses extensions, et même vos outils de rédaction LaTeX. Que vous soyez sur Windows ou Ubuntu, STIC-OS prépare votre machine pour que vous n'ayez plus qu'à une seule chose : exceller dans vos études." },
+            { id: "04", title: "HUB CERTIFICATIONS", icon: "🎓", details: "Le diplôme nous ouvre des portes, les certifications nous donnent les clés. Le Hub Certifications est une cellule de veille et d'entraide dédiée à la préparation des examens internationaux dès la L1. Que ce soit pour le CCNA (Cisco), les certifications Python (PCEP/PCAP), ou le TOEIC/TOEFL pour l'anglais, nous mutualisons les ressources : banques d'examens (dumps), groupes de révision intensifs et partage de vouchers. L'objectif : que chaque membre de la STIC 1 sorte avec un CV certifié et reconnu par les multinationales." },
+            { id: "05", title: "SOFT SKILLS & PRODUCTIVITÉ BOOTCAMP", icon: "🎭", details: "L'excellence technique mérite une présentation parfaite. Ce Bootcamp est un accélérateur de compétences hybrides : d'un côté, le leadership (prise de parole, CV, LinkedIn) ; de l'autre, la maîtrise absolue des outils de production. Nous organiserons des ateliers intensifs sur Excel Expert, la conception de présentations PowerPoint percutantes et l'initiation à LaTeX pour vos rapports scientifiques. Ne perdez plus de temps sur la mise en forme, apprenez à produire des documents de classe mondiale avec l'efficacité d'un ingénieur de la Silicon Valley." },
+            { id: "06", title: "RADAR DES SPECIALITES", icon: "🔍", details: "Le choix d'une spécialité ne doit pas être un saut dans l'inconnu. Le Radar est une plateforme d'orientation active dédiée à la STIC 1. Grâce à des rencontres exclusives avec des Alumni (anciens) de l'INP-HB et des professionnels du secteur, nous décryptons chaque parcours : Réseaux & Télécoms, Développement Software, Cybersécurité, ou Systèmes Embarqués. Anticipez les matières clés, comprenez les débouchés réels et choisissez la spécialité qui correspond à vos ambitions. Ne subissez pas votre orientation, pilotez-la. " },
+            { id: "07", title: "LINKEDIN CHALLENGE", icon: "🔗", details: "Parce qu'un profil vide ne sert à rien, nous lancerons le défi '40 jours pour briller'. Chaque semaine, un objectif simple : optimiser sa photo, rédiger son 'About' avec impact, et partager ses premiers projets (Python, C, ou LaTeX). À travers un système de soutien mutuel (likes, commentaires, partages), nous boosterons l'algorithme de chacun pour devenir la promotion la plus visible de l'INP-HB. Ne cherchez plus les opportunités, faites en sorte qu'elles vous trouvent." },
+            { id: "08", title: "JOURNEES PARRAINS", icon: "🤝", details: "Le réseau se construit aussi autour d'une manette ou d'un ballon. Les Journées Parrains-Filleuls sont nos rendez-vous de cohésion hors-cadre. Entre deux matchs de Maracana ou une partie de jeu (FIFA, Scrabble, carte), brisez la glace avec vos parrains. Ces moments de détente sont conçus pour créer une complicité réelle : discutez de vos projets autourd'un rafraîchissement, défiez votre parrain sur le terrain ou en e-sport, et profitez de son expérience dans une ambiance fun et sans pression. Parce qu'avant d'être des mentors, nos parrains sont nos grands frères." },
+            { id: "09", title: "HACKATHON CHALLENGE", icon: "🏆", details: "Le savoir n'est rien sans l'application. Le Hackathon Challenge est notre compétition annuelle de développement intensif. Par équipes mixtes (EIT & INFO), nous aurons 48 heures pour coder des solutions aux problèmes réels de l'INP-HB ou de la Côte d'Ivoire. Sous l'œil de nos parrains (Point 09) servant de mentors et de jurys, nous mettrons à l'épreuve nos compétences en C et Python. Les meilleurs projets seront propulsés sur le STIC Index (Point 01) et présentés aux entreprises partenaires. C'est ici que commence votre carrière d'innovateur." },
+            { id: "10", title: "LE SLOT OPEN-SOURCE", icon: "🎨", details: "Le meilleur projet de la STIC 1 n'est peut-être pas encore écrit. Pour ce dernier pilier, je vous offre une Carte Blanche. Je m'engage à allouer une partie du budget et de notre énergie commune pour réaliser l'idée que VOUS jugerez prioritaire. Que ce soit une escapade détente, un hackathon thématique ou une action sociale, nous voterons ensemble pour choisir le projet qui nous définit le mieux. Un président ne décide pas tout seul, il est le compilateur de vos ambitions. À vous de coder le dernier chapitre." }
+        ];
+
+        function triggerExplosion() {
+            const count = 200;
+            const defaults = { origin: { y: 0.7 }, colors: ['#36C5F0', '#d4af37', '#1e293b'] };
+            confetti({...defaults, particleCount: count * 0.25, spread: 26, startVelocity: 55 });
+            confetti({...defaults, particleCount: count * 0.35, spread: 100, decay: 0.91, scalar: 0.8 });
+            
+            gsap.to("#welcome-screen", { opacity: 0, duration: 0.5, onComplete: () => {
+                document.getElementById('welcome-screen').classList.add('hidden');
+                document.getElementById('main-footer').classList.remove('hidden');
+                navigateTo('home');
+            }});
+        }
+
+        function navigateTo(pageId) {
+            document.querySelectorAll('main, section').forEach(el => { 
+                el.classList.add('hidden'); 
+                el.style.opacity = '0'; 
+                el.style.transform = 'translateY(20px)';
+            });
+            
+            gsap.to("#logos-layer", { opacity: 1, pointerEvents: "auto", duration: 0.5 });
+            
+            const target = document.getElementById(pageId === 'home' ? 'home-page' : pageId + '-page');
+            target.classList.remove('hidden');
+            target.style.display = 'flex';
+            
+            gsap.to(target, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" });
+            
+            if(pageId === 'roadmap') renderHorizon();
+            window.scrollTo(0,0);
+        }
+
+        function renderHorizon() {
+            const scroller = document.getElementById('horizontal-scroller');
+            scroller.innerHTML = "";
+            roadmapData.forEach(p => {
+                const card = document.createElement('div');
+                card.className = "detail-card group";
+                card.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <span class="text-4xl group-hover:scale-110 transition-transform">${p.icon}</span>
+                        <span class="text-slate-100 font-black text-4xl id-tag transition-colors">${p.id}</span>
+                    </div>
+                    <h3 class="text-xl font-extrabold mt-6 uppercase tracking-tight">${p.title}</h3>
+                    <div class="details-content text-slate-500">${p.details}</div>
+                    <div class="mt-auto pt-4 text-[9px] font-bold uppercase opacity-30">Cliquer pour plus d'infos</div>
+                `;
+                card.onclick = () => {
+                    const isActive = card.classList.contains('active');
+                    document.querySelectorAll('.detail-card').forEach(c => c.classList.remove('active'));
+                    if(!isActive) {
+                        card.classList.add('active');
+                        if(window.innerWidth > 1024) {
+                            card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                        }
+                    }
+                };
+                scroller.appendChild(card);
+            });
+        }
+    </script>
+</body>
+</html>
