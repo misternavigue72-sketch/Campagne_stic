@@ -46,10 +46,15 @@
         }
 
         @media (max-width: 1023px) {
-            .scroll-wrapper { flex-direction: column; overflow-x: hidden; padding: 1.5rem; }
-            .detail-card { min-width: 100%; height: auto; min-height: 140px; padding: 1.5rem; }
+            /* Correction de l'espace vide sur mobile */
+            #welcome-screen { height: 90vh; }
+            #home-page, #about-page, #roadmap-page { padding-top: 6rem; }
+            h1 { font-size: 3.5rem !important; }
+            
+            .scroll-wrapper { flex-direction: column; overflow-x: hidden; padding: 1rem; gap: 1rem; }
+            .detail-card { min-width: 100%; height: auto; min-height: 120px; padding: 1.5rem; }
             .detail-card.active { background: var(--deep-blue); color: white; }
-            .detail-card.active .details-content { max-height: 800px; opacity: 1; margin-top: 1rem; padding-bottom: 1rem; }
+            .detail-card.active .details-content { max-height: 1000px; opacity: 1; margin-top: 1rem; padding-bottom: 1rem; }
         }
 
         .citation-box { border-left: 5px solid var(--accent-blue); background: rgba(54, 197, 240, 0.05); padding: 1.5rem; border-radius: 0 20px 20px 0; font-weight: 700; color: var(--deep-blue); font-style: italic; }
@@ -72,7 +77,7 @@
         </div>
     </nav>
 
-    <div id="welcome-screen" class="h-screen flex flex-col items-center justify-center text-center p-6 relative z-50">
+    <div id="welcome-screen" class="flex flex-col items-center justify-center text-center p-6 relative z-50">
         <h2 class="text-3xl font-bold mb-10 uppercase tracking-widest">L'avenir est ici</h2>
         <button class="btn-glow scale-110" onclick="triggerExplosion()">DÉCOUVRIR LE PROJET 🚀</button>
     </div>
@@ -103,7 +108,7 @@
     </section>
 
     <section id="roadmap-page" class="hidden opacity-0 flex-col items-center pt-24 px-4 pb-40">
-        <h2 class="text-3xl font-black mb-2 uppercase tracking-widest text-center">ROADMAP TO THE SUCCES</h2>
+        <h2 class="text-3xl font-black mb-2 uppercase tracking-widest text-center">ROADMAP TO THE SUCCESS</h2>
         <p class="text-slate-500 mb-10 italic">Cliquez sur un pilier pour découvrir les détails</p>
         <div class="scroll-wrapper w-full" id="horizontal-scroller"></div>
         <button class="mt-12 btn-glow" onclick="navigateTo('home')">← MENU PRINCIPAL</button>
@@ -113,7 +118,7 @@
         <div class="flex justify-between items-center max-w-6xl mx-auto">
             <div class="text-[10px] md:text-xs font-bold text-slate-500 uppercase text-left">
                 <p>© 2026 KONE NAVIGUE</p>
-                <p>Candidat à la presidence de la promotion STIC 25 </p>
+                <p>Candidat à la présidence de la promotion STIC 25 </p>
             </div>
             <div class="flex gap-4 text-[10px] font-black uppercase">
                 <a href="https://github.com/misternavigue72-sketch" target="_blank" class="hover:text-blue-500">GitHub</a>
@@ -130,8 +135,8 @@
             { id: "05", title: "SOFT SKILLS & PRODUCTIVITÉ BOOTCAMP", icon: "🎭", details: "L'excellence technique mérite une présentation parfaite. Ce Bootcamp est un accélérateur de compétences hybrides : d'un côté, le leadership (prise de parole, CV, LinkedIn) ; de l'autre, la maîtrise absolue des outils de production. Nous organiserons des ateliers intensifs sur Excel Expert, la conception de présentations PowerPoint percutantes et l'initiation à LaTeX pour vos rapports scientifiques. Ne perdez plus de temps sur la mise en forme, apprenez à produire des documents de classe mondiale avec l'efficacité d'un ingénieur de la Silicon Valley." },
             { id: "06", title: "RADAR DES SPECIALITES", icon: "🔍", details: "Le choix d'une spécialité ne doit pas être un saut dans l'inconnu. Le Radar est une plateforme d'orientation active dédiée à la STIC 1. Grâce à des rencontres exclusives avec des Alumni (anciens) de l'INP-HB et des professionnels du secteur, nous décryptons chaque parcours : Réseaux & Télécoms, Développement Software, Cybersécurité, ou Systèmes Embarqués. Anticipez les matières clés, comprenez les débouchés réels et choisissez la spécialité qui correspond à vos ambitions. Ne subissez pas votre orientation, pilotez-la. " },
             { id: "07", title: "LINKEDIN CHALLENGE", icon: "🔗", details: "Parce qu'un profil vide ne sert à rien, nous lancerons le défi '40 jours pour briller'. Chaque semaine, un objectif simple : optimiser sa photo, rédiger son 'About' avec impact, et partager ses premiers projets (Python, C, ou LaTeX). À travers un système de soutien mutuel (likes, commentaires, partages), nous boosterons l'algorithme de chacun pour devenir la promotion la plus visible de l'INP-HB. Ne cherchez plus les opportunités, faites en sorte qu'elles vous trouvent." },
-            { id: "08", title: "JOURNEES PARRAINS", icon: "🤝", details: "Le réseau se construit aussi autour d'une manette ou d'un ballon. Les Journées Parrains-Filleuls sont nos rendez-vous de cohésion hors-cadre. Entre deux matchs de Maracana ou une partie de jeu (FIFA, Scrabble, carte), brisez la glace avec vos parrains. Ces moments de détente sont conçus pour créer une complicité réelle : discutez de vos projets autourd'un rafraîchissement, défiez votre parrain sur le terrain ou en e-sport, et profitez de son expérience dans une ambiance fun et sans pression. Parce qu'avant d'être des mentors, nos parrains sont nos grands frères." },
-            { id: "09", title: "HACKATHON CHALLENGE", icon: "🏆", details: "Le savoir n'est rien sans l'application. Le Hackathon Challenge est notre compétition annuelle de développement intensif. Par équipes mixtes (EIT & INFO), nous aurons 48 heures pour coder des solutions aux problèmes réels de l'INP-HB ou de la Côte d'Ivoire. Sous l'œil de nos parrains (Point 09) servant de mentors et de jurys, nous mettrons à l'épreuve nos compétences en C et Python. Les meilleurs projets seront propulsés sur le STIC Index (Point 01) et présentés aux entreprises partenaires. C'est ici que commence votre carrière d'innovateur." },
+            { id: "08", title: "JOURNEES PARRAINS", icon: "🤝", details: "Le réseau se construit aussi autour d'une manette ou d'un ballon. Les Journées Parrains-Filleuls sont nos rendez-vous de cohésion hors-cadre. Entre deux matchs de Maracana ou une partie de jeu (FIFA, Scrabble, carte), brisez la glace avec vos parrains. Ces moments de détente sont conçus pour créer une complicité réelle : discutez de vos projets autour d'un rafraîchissement, défiez votre parrain sur le terrain ou en e-sport, et profitez de son expérience dans une ambiance fun et sans pression. Parce qu'avant d'être des mentors, nos parrains sont nos grands frères." },
+            { id: "09", title: "HACKATHON CHALLENGE", icon: "🏆", details: "Le savoir n'est rien sans l'application. Le Hackathon Challenge est notre compétition annuelle de développement intensif. Par équipes mixtes (EIT & INFO), nous aurons 48 heures pour coder des solutions aux problèmes réels de l'INP-HB ou de la Côte d'Ivoire. Sous l'œil de nos parrains servant de mentors et de jurys, nous mettrons à l'épreuve nos compétences en C et Python. Les meilleurs projets seront propulsés sur le STIC Index et présentés aux entreprises partenaires. C'est ici que commence votre carrière d'innovateur." },
             { id: "10", title: "LE SLOT OPEN-SOURCE", icon: "🎨", details: "Le meilleur projet de la STIC 1 n'est peut-être pas encore écrit. Pour ce dernier pilier, je vous offre une Carte Blanche. Je m'engage à allouer une partie du budget et de notre énergie commune pour réaliser l'idée que VOUS jugerez prioritaire. Que ce soit une escapade détente, un hackathon thématique ou une action sociale, nous voterons ensemble pour choisir le projet qui nous définit le mieux. Un président ne décide pas tout seul, il est le compilateur de vos ambitions. À vous de coder le dernier chapitre." }
         ];
 
